@@ -1,5 +1,11 @@
 name: Terraform apply
-on: [push]
+on: 
+  workflow_dispatch:
+    inputs:
+      Option: 
+        description: "apply or destroy"
+        default: 'apply'
+        required: true
 jobs:
   terraform-apply:
     name: Terraform Apply
@@ -15,5 +21,30 @@ jobs:
       - uses: azure/login@v2
         with: 
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-      - run: |
-          az account list
+      - name: Configure working directory
+        id: wd
+        run: |
+          echo "::set-output name=directory::./$WORKSPACE"
+      - name: Terraform init
+        id: init
+        working-directory: ./${{ steps.wd.outputs.directory }}
+        run: |
+          terraform init -input=false
+      - name: Terraform plan 
+        if: ${{ github.events.inputs.Operation }} == 'apply'
+        id: plan
+        working-directory: ./${{ steps.wd.outputs.directory }}
+        run: |
+          terraform plan -out plan.out -input=false
+      - name: Terraform apply 
+        if: ${{ github.events.inputs.Operation }} == 'apply'
+        id: apply
+        working-directory: ./${{ steps.wd.outputs.directory }}
+        run: |
+          terraform apply -input=false -auto-approve plan.out
+      - name: Terraform destroy 
+        if: ${{ github.events.inputs.Operation }} == 'apply'
+        id: destroy
+        working-directory: ./$WORKSPACE 
+        run: |
+          terraform destroy -input=false -auto-approve
