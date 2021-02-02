@@ -29,21 +29,13 @@ jobs:
         run: |
           echo "::set-output name=directory::./$WORKSPACE"
 
-      - name: Set env variables for terraform
-        id: env_vars
+      - name: Terraform init
+        id: init
         env:
           ARM_CLIENT_ID: ${{ secrets.CLIENT_ID }}
           ARM_CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
           ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
           ARM_SUBSCRIPTION_ID: 5efa86ae-29bc-4760-a1db-51bde40f2fad
-        run: |
-          # export ARM_CLIENT_ID="$client_id"  
-          # export ARM_CLIENT_SECRET="$client_secret"
-          # export ARM_TENANT_ID="$tenant_id"
-           echo "$ARM_SUBSCRIPTION_ID"
-
-      - name: Terraform init
-        id: init
         working-directory: ./${{ steps.wd.outputs.directory }}
         run: |
           echo "$ARM_SUBSCRIPTION_ID"
