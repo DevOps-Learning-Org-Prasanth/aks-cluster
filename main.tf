@@ -26,12 +26,8 @@ terraform{
     }
 }
 
-provider "azurerm"{
-    features{}
-    subscription_id="5efa86ae-29bc-4760-a1db-51bde40f2fad"
-    client_id= var.client_id
-    client_secret= var.client_secret
-    tenant_id= var.tenant_id
+module "provider"{
+    source="/modules/provider"
 }
 
 resource "azurerm_resource_group" "rg"{
