@@ -31,11 +31,15 @@ jobs:
 
       - name: Set env variables for terraform
         id: env_vars
+        env:
+          client_id: ${{ secrets.CLIENT_ID }}
+          client_secret: ${{ secrets.CLIENT_SECRET }}
+          tenant_id: ${{ secrets.TENANT_ID }}
         run: |
           export ARM_SUBSCRIPTION_ID="5efa86ae-29bc-4760-a1db-51bde40f2fad"
-          export ARM_CLIENT_ID= \`${{ secrets.CLIENT_ID }}\`  
-          export ARM_CLIENT_SECRET= \`${{ secrets.CLIENT_SECRET }}\`
-          export ARM_TENANT_ID= \`${{ secrets.TENANT_ID }}\`
+          export ARM_CLIENT_ID= "$client_id"  
+          export ARM_CLIENT_SECRET= "$client_secret"
+          export ARM_TENANT_ID= "$tenant_id"
 
       - name: Terraform init
         id: init
