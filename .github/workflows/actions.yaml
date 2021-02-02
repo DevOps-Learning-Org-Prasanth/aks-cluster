@@ -53,9 +53,9 @@ jobs:
         working-directory: ./${{ steps.wd.outputs.directory }}
         run: |
           terraform apply -input=false -auto-approve plan.out
-      - name: Terraform destroy 
-        if: ${{ github.events.inputs.Operation }} == 'destroy'
-        id: destroy
-        working-directory: ./$WORKSPACE 
-        run: |
-          terraform destroy -input=false -auto-approve
+      # - name: Terraform destroy 
+        # if: ${{ github.events.inputs.Operation }} == 'destroy'
+        # id: destroy
+        # working-directory: ./$WORKSPACE 
+        # run: |
+          # terraform destroy -input=false -auto-approve
