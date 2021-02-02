@@ -26,8 +26,8 @@ terraform{
     }
 }
 
-module "provider"{
-    source="/modules/provider"
+provider "azurerm"{
+    features{}
 }
 
 resource "azurerm_resource_group" "rg"{
