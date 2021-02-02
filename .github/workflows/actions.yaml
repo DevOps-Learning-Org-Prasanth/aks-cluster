@@ -29,14 +29,6 @@ jobs:
         run: |
           echo "::set-output name=directory::./$WORKSPACE"
 
-      - name: Set env variables for terraform
-        id: env_vars
-        run: |
-          export ARM_SUBSCRIPTION_ID=5efa86ae-29bc-4760-a1db-51bde40f2fad
-          export ARM_CLIENT_ID= ${{ secrets.CLIENT_ID }} 
-          export ARM_CLIENT_SECRET= ${{secrets.CLIENT_SECRET}}
-          export ARM_TENANT_ID= ${{secrets.TENANT_ID}}
-
       - name: Terraform init
         id: init
         working-directory: ./${{ steps.wd.outputs.directory }}
@@ -48,7 +40,10 @@ jobs:
         id: plan
         working-directory: ./${{ steps.wd.outputs.directory }}
         run: |
-          terraform plan -out plan.out -input=false
+          terraform plan -out plan.out -input=false \
+            -var 'client_id=${{ secrets.CLIENT_ID }}' \
+            -var 'client_secret=${{secrets.CLIENT_SECRET}}' \
+            -var 'tenant_id=${{secrets.TENANT_ID}}' \
           
       - name: Terraform apply 
         if: ${{ github.events.inputs.Operation }} == 'apply'

@@ -1,3 +1,16 @@
+variable client_id{
+    type= string
+    description = "client id of service principal"
+}
+variable client_secret{
+    type= string
+    description = "client secret of service principal"
+}
+variable tenant_id{
+    type= string
+    description = "tenant id of service principal"
+}
+
 terraform{
     backend "azurerm"{
         resource_group_name = "Cloud-DevOps-Training"
@@ -15,6 +28,10 @@ terraform{
 
 provider "azurerm"{
     features{}
+    subscription_id="5efa86ae-29bc-4760-a1db-51bde40f2fad"
+    client_id= var.client_id
+    client_secret= var.client_secret
+    tenant_id= var.tenant_id
 }
 
 resource "azurerm_resource_group" "rg"{
