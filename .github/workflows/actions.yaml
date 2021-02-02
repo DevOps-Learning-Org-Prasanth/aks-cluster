@@ -32,7 +32,7 @@ jobs:
       - name: Set env variables for terraform
         id: env_vars
         run: |
-          export ARM_SUBSCRIPTION_ID="5efa86ae-29bc-4760-a1db-51bde40f2fad"
+          export ARM_SUBSCRIPTION_ID=5efa86ae-29bc-4760-a1db-51bde40f2fad
           export ARM_CLIENT_ID= ${{ secrets.CLIENT_ID }} 
           export ARM_CLIENT_SECRET= ${{secrets.CLIENT_SECRET}}
           export ARM_TENANT_ID= ${{secrets.TENANT_ID}}
