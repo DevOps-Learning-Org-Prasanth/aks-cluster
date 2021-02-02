@@ -36,10 +36,11 @@ jobs:
           client_secret: ${{ secrets.CLIENT_SECRET }}
           tenant_id: ${{ secrets.TENANT_ID }}
         run: |
-          export ARM_SUBSCRIPTION_ID="5efa86ae-29bc-4760-a1db-51bde40f2fad"
-          export ARM_CLIENT_ID="$client_id"  
-          export ARM_CLIENT_SECRET="$client_secret"
-          export ARM_TENANT_ID="$tenant_id"
+          # export ARM_SUBSCRIPTION_ID="5efa86ae-29bc-4760-a1db-51bde40f2fad"
+          # export ARM_CLIENT_ID="$client_id"  
+          # export ARM_CLIENT_SECRET="$client_secret"
+          # export ARM_TENANT_ID="$tenant_id"
+          echo $client_id
 
       - name: Terraform init
         id: init
