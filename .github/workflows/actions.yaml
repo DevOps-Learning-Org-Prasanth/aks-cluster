@@ -46,6 +46,7 @@ jobs:
         id: init
         working-directory: ./${{ steps.wd.outputs.directory }}
         run: |
+          echo $ARM_SUBSCRIPTION_ID
           terraform init -input=false
 
       - name: Terraform plan 
