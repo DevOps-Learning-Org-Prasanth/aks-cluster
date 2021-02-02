@@ -15,27 +15,33 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      
       - uses: hashicorp/setup-terraform@v1
         with:
           terraform-version: 0.14.2
-      - uses: azure/login@v2
+      
+      - uses: azure/login@v1
         with: 
           creds: ${{ secrets.AZURE_CREDENTIALS }}
+      
       - name: Configure working directory
         id: wd
         run: |
           echo "::set-output name=directory::./$WORKSPACE"
+
       - name: Terraform init
         id: init
         working-directory: ./${{ steps.wd.outputs.directory }}
         run: |
           terraform init -input=false
+
       - name: Terraform plan 
         if: ${{ github.events.inputs.Operation }} == 'apply'
         id: plan
         working-directory: ./${{ steps.wd.outputs.directory }}
         run: |
           terraform plan -out plan.out -input=false
+          
       - name: Terraform apply 
         if: ${{ github.events.inputs.Operation }} == 'apply'
         id: apply
