@@ -68,12 +68,12 @@ jobs:
       - uses: azure/login@v1
         with: 
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-          
+
       - name: Configure working directory
-         id: wd
-         run: |
-          echo "::set-output name=directory::./$WORKSPACE"
-          ls
+        id: wd
+        run: |
+         echo "::set-output name=directory::./$WORKSPACE"
+         ls
 
       - name: Terraform init
         id: init
