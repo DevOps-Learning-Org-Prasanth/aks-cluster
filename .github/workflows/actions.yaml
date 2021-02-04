@@ -62,6 +62,7 @@ jobs:
         id: wd
         run: |
           echo "::set-output name=directory::./$WORKSPACE"
+          ls
 
       - name: Terraform init
         id: init
