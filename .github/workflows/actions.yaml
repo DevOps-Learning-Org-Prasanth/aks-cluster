@@ -43,20 +43,20 @@ jobs:
 
       - name: Terraform plan 
         id: plan
-        if: ${{ github.events.inputs.Operation  == 'apply' }}
+        if: ${{ github.event.inputs.Operation  == 'apply' }}
         working-directory: ./${{ steps.wd.outputs.directory }}
         run: |
           terraform plan -out plan.out -input=false
           
       - name: Terraform apply 
-        if: ${{ github.events.inputs.Operation == 'apply' }}
+        if: ${{ github.event.inputs.Operation == 'apply' }}
         id: apply
         working-directory: ./${{ steps.wd.outputs.directory }}
         run: |
           terraform apply -input=false -auto-approve plan.out
 
       - name: Terraform destroy 
-        if: ${{ github.events.inputs.Operation == 'destroy' }}
+        if: ${{ github.event.inputs.Operation == 'destroy' }}
         id: destroy
         working-directory: ./$WORKSPACE 
         run: |
