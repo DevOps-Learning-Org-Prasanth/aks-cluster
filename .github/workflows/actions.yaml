@@ -3,20 +3,21 @@ on:
   workflow_dispatch:
     inputs:
       Operation: 
-        description: "apply or destroy"
-        default: 'apply'
+        description: "create or delete"
+        default: 'create'
         required: true
+env:
+  WORKSPACE: ${{ github.event.inputs.instance }}
+  ARM_CLIENT_ID: ${{ secrets.CLIENT_ID }}
+  ARM_CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+  ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
+  ARM_SUBSCRIPTION_ID: 5efa86ae-29bc-4760-a1db-51bde40f2fad
+    
 jobs:
-  Cluster-Config:
+  Create:
     name: Create cluster
+    if: ${{ github.event.inputs.Operation == 'create' }}
     runs-on: ubuntu-latest
-    env:
-      WORKSPACE: ${{ github.event.inputs.instance }}
-      ARM_CLIENT_ID: ${{ secrets.CLIENT_ID }}
-      ARM_CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-      ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
-      ARM_SUBSCRIPTION_ID: 5efa86ae-29bc-4760-a1db-51bde40f2fad
-      oper: ${{ github.event.inputs.Operation }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -38,26 +39,39 @@ jobs:
         id: init
         working-directory: ./${{ steps.wd.outputs.directory }}
         run: |
-          echo "${{ github.event.inputs.Operation }}"
           terraform init -input=false
 
       - name: Terraform plan 
         id: plan
-        if: ${{ github.event.inputs.Operation  == 'apply' }}
         working-directory: ./${{ steps.wd.outputs.directory }}
         run: |
           terraform plan -out plan.out -input=false
           
       - name: Terraform apply 
-        if: ${{ github.event.inputs.Operation == 'apply' }}
         id: apply
         working-directory: ./${{ steps.wd.outputs.directory }}
         run: |
           terraform apply -input=false -auto-approve plan.out
+  
+  Destroy:
+    name: Destroy Cluster
+    if: ${{ github.event.inputs.Operation == 'delete' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure working directory
+        id: wd
+        run: |
+          echo "::set-output name=directory::./$WORKSPACE"
+
+      - name: Terraform init
+        id: init
+        working-directory: ./${{ steps.wd.outputs.directory }}
+        run: |
+          echo "${{ github.event.inputs.Operation }}"
+          terraform init -input=false
 
       - name: Terraform destroy 
-        if: ${{ github.event.inputs.Operation == 'destroy' }}
         id: destroy
-        working-directory: ./$WORKSPACE 
+        working-directory: ./${{ steps.wd.outputs.directory }} 
         run: |
           terraform destroy -input=false -auto-approve
