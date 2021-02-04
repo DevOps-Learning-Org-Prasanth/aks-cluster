@@ -2,7 +2,7 @@ name: Terraform apply
 on: 
   workflow_dispatch:
     inputs:
-      Option: 
+      Operation: 
         description: "apply or destroy"
         default: 'apply'
         required: true
@@ -16,6 +16,7 @@ jobs:
       ARM_CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
       ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
       ARM_SUBSCRIPTION_ID: 5efa86ae-29bc-4760-a1db-51bde40f2fad
+      oper: ${{ github.event.inputs.Operation }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -41,20 +42,21 @@ jobs:
           terraform init -input=false
 
       - name: Terraform plan 
-        if: ${{ github.events.inputs.Option  == 'apply' }}
+        if: oper == "apply"
         id: plan
         working-directory: ./${{ steps.wd.outputs.directory }}
         run: |
           terraform plan -out plan.out -input=false
           
       - name: Terraform apply 
-        if: ${{ github.events.inputs.Option == 'apply' }}
+        if: oper == "apply"
         id: apply
         working-directory: ./${{ steps.wd.outputs.directory }}
         run: |
           terraform apply -input=false -auto-approve plan.out
+      
       - name: Terraform destroy 
-        if: ${{ github.events.inputs.Option == 'destroy' }}
+        if: oper == "destroy"
         id: destroy
         working-directory: ./$WORKSPACE 
         run: |
