@@ -1,4 +1,4 @@
-name: Terraform apply
+name: Cluster Configuration
 on: 
   workflow_dispatch:
     inputs:
@@ -7,8 +7,8 @@ on:
         default: 'apply'
         required: true
 jobs:
-  terraform-apply:
-    name: Terraform Apply_Destroy
+  Cluster-Config:
+    name: Create cluster
     runs-on: ubuntu-latest
     env:
       WORKSPACE: ${{ github.event.inputs.instance }}
@@ -38,25 +38,25 @@ jobs:
         id: init
         working-directory: ./${{ steps.wd.outputs.directory }}
         run: |
-          echo "$ARM_SUBSCRIPTION_ID"
+          echo "${{ github.event.inputs.Operation }}"
           terraform init -input=false
 
       - name: Terraform plan 
-        if: env.oper == "apply"
+        if: ${{ github.events.inputs.Operation  == "apply" }}
         id: plan
         working-directory: ./${{ steps.wd.outputs.directory }}
         run: |
           terraform plan -out plan.out -input=false
           
       - name: Terraform apply 
-        if: env.oper == "apply"
+        if: ${{ github.events.inputs.Operation == "apply" }}
         id: apply
         working-directory: ./${{ steps.wd.outputs.directory }}
         run: |
           terraform apply -input=false -auto-approve plan.out
-      
+
       - name: Terraform destroy 
-        if: env.oper == "destroy"
+        if: ${{ github.events.inputs.Operation == "destroy" }}
         id: destroy
         working-directory: ./$WORKSPACE 
         run: |
