@@ -42,8 +42,8 @@ jobs:
           terraform init -input=false
 
       - name: Terraform plan 
-        if: ${{ github.events.inputs.Operation  == 'apply' }}
         id: plan
+        if: ${{ github.events.inputs.Operation  == 'apply' }}
         working-directory: ./${{ steps.wd.outputs.directory }}
         run: |
           terraform plan -out plan.out -input=false
