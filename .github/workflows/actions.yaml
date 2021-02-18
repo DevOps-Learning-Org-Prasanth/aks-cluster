@@ -15,7 +15,7 @@ env:
     
 jobs:
   Create:
-    name: Create cluster and initialize cluster
+    name: Create and initialize cluster
     if: ${{ github.event.inputs.Operation == 'create' }}
     runs-on: ubuntu-latest
     steps:
@@ -60,6 +60,7 @@ jobs:
       
       - name: Install docker 
         run: |
+          sudo apt-get remove docker
           curl -fsSL https://get.docker.com -o get-docker.sh
           sudo sh get-docker.sh
       
