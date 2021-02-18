@@ -66,7 +66,7 @@ jobs:
       
       - name: Acr login
         run: |
-          az acr login -name prasanth98registry
+          az acr login --name prasanth98registry
 
       - name: Build Image
         working-directory: ${{ steps.wdc.outputs.directory }}
