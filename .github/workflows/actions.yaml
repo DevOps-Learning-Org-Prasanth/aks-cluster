@@ -76,7 +76,6 @@ jobs:
 
       - name: ACR logout
         run: |
-          az acr token delete
           docker logout
 
   Destroy:
