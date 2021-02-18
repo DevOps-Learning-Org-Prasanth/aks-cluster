@@ -15,7 +15,7 @@ env:
     
 jobs:
   Create:
-    name: Create cluster
+    name: Create cluster and initialize cluster
     if: ${{ github.event.inputs.Operation == 'create' }}
     runs-on: ubuntu-latest
     steps:
@@ -65,7 +65,7 @@ jobs:
       
       - name: Acr login
         run: |
-          az acr login -name prasanth98registry.acr.io
+          az acr login -name prasanth98registry
 
       - name: Build Image
         working-directory: ${{ steps.wdc.outputs.directory }}
