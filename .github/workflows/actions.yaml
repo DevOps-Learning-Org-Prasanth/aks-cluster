@@ -71,8 +71,8 @@ jobs:
       - name: Build Image
         working-directory: ${{ steps.wdc.outputs.directory }}
         run: |
-          sudo docker build -t prasanth98registry.acr.io/myapp:0.0.1 .
-          sudo docker push prasanth98registry.acr.io/myapp:0.0.1
+          sudo docker build -t prasanth98registry.azurecr.io/myapp:0.0.1 .
+          sudo docker push prasanth98registry.azurecr.io/myapp:0.0.1
 
       - name: ACR logout
         run: |
