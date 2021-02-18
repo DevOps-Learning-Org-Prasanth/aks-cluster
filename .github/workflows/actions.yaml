@@ -31,42 +31,30 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       
       - name: Configure working directory
-        id: wd
+        id: wdi
         run: |
           echo "::set-output name=directory::./$WORKSPACE/cluster"
 
       - name: Terraform init
         id: init
-        working-directory: ./${{ steps.wd.outputs.directory }}
+        working-directory: ./${{ steps.wdi.outputs.directory }}
         run: |
           terraform init -input=false
 
       - name: Terraform plan 
         id: plan
-        working-directory: ./${{ steps.wd.outputs.directory }}
+        working-directory: ./${{ steps.wdi.outputs.directory }}
         run: |
           terraform plan -out plan.out -input=false
           
       - name: Terraform apply 
         id: apply
-        working-directory: ./${{ steps.wd.outputs.directory }}
+        working-directory: ./${{ steps.wdi.outputs.directory }}
         run: |
           terraform apply -input=false -auto-approve plan.out
-          
-  Image:
-    name: Upload Image
-    if: ${{ github.event.inputs.Operation == 'create' }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      
-      - uses: azure/login@v1
-        with: 
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-     
-      - name: Configuring working directory
-        id: wd
+
+      - name: Configuring image working directory
+        id: wdc
         run: |
           echo "::set-output name=directory::./$WORKSPACE/Image"
       
@@ -80,7 +68,7 @@ jobs:
           az acr login -name prasanth98registry.acr.io
 
       - name: Build Image
-        working-directory: ${{ steps.wd.outputs.directory }}
+        working-directory: ${{ steps.wdc.outputs.directory }}
         run: |
           sudo docker build -t prasanth98registry.acr.io/myapp:0.0.1 .
           sudo docker push prasanth98registry.acr.io/myapp:0.0.1
