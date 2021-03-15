@@ -53,31 +53,31 @@ jobs:
         run: |
           terraform apply -input=false -auto-approve plan.out
 
-      - name: Configuring image working directory
-        id: wdc
-        run: |
-          echo "::set-output name=directory::./$WORKSPACE/Image"
-      
-      - name: Install docker 
-        run: |
-          sudo apt-get remove docker
-          curl -fsSL https://get.docker.com -o get-docker.sh
-          sudo sh get-docker.sh
-      
-      - name: Acr login
-        run: |
-          az acr login --name prasanth98registry
-
-      - name: Build Image
-        working-directory: ${{ steps.wdc.outputs.directory }}
-        run: |
-          sudo docker build -t prasanth98registry.azurecr.io/myapp:0.0.1 .
-          sudo docker push prasanth98registry.azurecr.io/myapp:0.0.1
-
-      - name: ACR logout
-        run: |
-          docker logout
-
+      # - name: Configuring image working directory
+        # id: wdc
+        # run: |
+          # echo "::set-output name=directory::./$WORKSPACE/Image"
+      # 
+      # - name: Install docker 
+        # run: |
+          # sudo apt-get remove docker
+          # curl -fsSL https://get.docker.com -o get-docker.sh
+          # sudo sh get-docker.sh
+      # 
+      # - name: Acr login
+        # run: |
+          # az acr login --name prasanth98registry
+# 
+      # - name: Build Image
+        # working-directory: ${{ steps.wdc.outputs.directory }}
+        # run: |
+          # sudo docker build -t prasanth98registry.azurecr.io/myapp:0.0.1 .
+          # sudo docker push prasanth98registry.azurecr.io/myapp:0.0.1
+# 
+      # - name: ACR logout
+        # run: |
+          # docker logout
+# 
   Destroy:
     name: Destroy Cluster
     if: ${{ github.event.inputs.Operation == 'delete' }}
