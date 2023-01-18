@@ -2,7 +2,7 @@ terraform{
     backend "azurerm"{
         resource_group_name = "Cloud-DevOps-Training"
         storage_account_name= "cloudconfigbackend"
-        container_name= "tfstate" 
+        container_name= "tfstate"
         key="terraform.tfstate"
     }
     required_providers {
@@ -22,7 +22,7 @@ resource "azurerm_kubernetes_cluster" "aks"{
     resource_group_name = "Cloud-DevOps-Training"
     location = "eastus"
     dns_prefix = "ContainerTraining-dns"
-
+    kubernetes_version = "1.22.11"
     default_node_pool{
         name = "default"
         node_count = 2
