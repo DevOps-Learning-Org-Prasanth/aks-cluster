@@ -17,25 +17,30 @@ provider "azurerm"{
     features{}
 }
 
+resource "azurerm_user_assigned_identity" "aks" {
+  resource_group_name = "Cloud-DevOps-Training"
+  location            = "southcentralus"
+  name                = format("%s-MANAGED-IDENTITY", local.resource_prefix)
+}
+
 resource "azurerm_kubernetes_cluster" "aks"{
     name= "ContainerTraining"
     resource_group_name = "Cloud-DevOps-Training"
-    location = "eastus"
+    location = "southcentralus"
     dns_prefix = "ContainerTraining-dns"
     kubernetes_version = "1.22.11"
+    oidc_issuer_enabled = true
     default_node_pool{
         name = "default"
-        node_count = 2
+        node_count = 1
         vm_size = "Standard_DS3_v2"
     }
     identity{
-        type = "SystemAssigned"
+        type = "UserAssigned"
+        identity_ids = [ azurerm_user_assigned_identity.aks.id ]
     }
 }
 
-resource "azurerm_container_registry" "acr"{
-    name = "prasanth98registry"
-    resource_group_name = "Cloud-DevOps-Training"
-    location = "eastus"
-    sku = "Standard"
+output "oidc_issuer" {
+    value = azurerm_kubernetes_cluster.aks.oidc_issuer_url
 }
