@@ -1,9 +1,10 @@
 name: Plan on Push
 on:
   push:
-    - '*'
-    - '!master'
-    - '!main'
+    branches:
+      - '*'
+      - '!master'
+      - '!main'
 env:
   WORKSPACE: ${{ github.event.inputs.instance }}
   ARM_CLIENT_ID: ${{ secrets.CLIENT_ID }}
