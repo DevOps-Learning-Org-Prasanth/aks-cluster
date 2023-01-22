@@ -28,7 +28,7 @@ resource "azurerm_kubernetes_cluster" "aks"{
     resource_group_name = "Cloud-DevOps-Training"
     location = "southcentralus"
     dns_prefix = "ContainerTraining-dns"
-    kubernetes_version = "1.22.11"
+    kubernetes_version = "1.23.8"
     oidc_issuer_enabled = true
     default_node_pool{
         name = "default"
