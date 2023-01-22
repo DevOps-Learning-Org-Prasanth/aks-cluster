@@ -2,7 +2,7 @@ name: Plan on Push
 on:
   push:
     branches:
-      - '!master'
+      # - '!master'
       - '*'
 env:
   WORKSPACE: ${{ github.event.inputs.instance }}
