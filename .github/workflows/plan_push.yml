@@ -1,4 +1,4 @@
-Name: Plan on Push
+name: Plan on Push
 on:
   push:
     - '*'
