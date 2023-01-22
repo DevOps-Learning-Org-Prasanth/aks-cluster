@@ -20,7 +20,7 @@ provider "azurerm"{
 resource "azurerm_user_assigned_identity" "aks" {
   resource_group_name = "Cloud-DevOps-Training"
   location            = "southcentralus"
-  name                = format("%s-MANAGED-IDENTITY", local.resource_prefix)
+  name                = "test-managedIdentity"
 }
 
 resource "azurerm_kubernetes_cluster" "aks"{
