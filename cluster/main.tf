@@ -41,6 +41,17 @@ resource "azurerm_kubernetes_cluster" "aks"{
     }
 }
 
+data "azurerm_client_config" "current" {}
+
+# keyvault
+resource "azurerm_key_vault" "aks"{
+    name = "aks-kv"
+    location = "southcentralus"
+    resource_group_name = "Cloud-DevOps-Training"
+    sku_name = "standard"
+    tenant_id = data.azurerm_client_config.current.tenant_id 
+}
+
 output "oidc_issuer" {
     value = azurerm_kubernetes_cluster.aks.oidc_issuer_url
 }

@@ -1,0 +1,45 @@
+Name: Plan on Push
+on:
+  push:
+    - '*'
+    - '!master'
+    - '!main'
+env:
+  WORKSPACE: ${{ github.event.inputs.instance }}
+  ARM_CLIENT_ID: ${{ secrets.CLIENT_ID }}
+  ARM_CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+  ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
+  ARM_SUBSCRIPTION_ID: 5efa86ae-29bc-4760-a1db-51bde40f2fad
+
+jobs:
+  plan:
+    name: plan on push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - uses: hashicorp/setup-terraform@v1
+        with:
+          terraform-version: 1.0.2
+      
+      - uses: azure/login@v1
+        with: 
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      
+      - name: Configure working directory
+        id: wdi
+        run: |
+          echo "::set-output name=directory::./$WORKSPACE/cluster"
+
+      - name: Terraform init
+        id: init
+        working-directory: ./${{ steps.wdi.outputs.directory }}
+        run: |
+          terraform init -input=false
+
+      - name: Terraform plan 
+        id: plan
+        working-directory: ./${{ steps.wdi.outputs.directory }}
+        run: |
+          terraform plan -out plan.out -input=false
