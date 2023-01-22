@@ -45,7 +45,7 @@ data "azurerm_client_config" "current" {}
 
 # keyvault
 resource "azurerm_key_vault" "aks"{
-    name = "aks-kv"
+    name = "aks-kv-pk98"
     location = "southcentralus"
     resource_group_name = "Cloud-DevOps-Training"
     sku_name = "standard"
