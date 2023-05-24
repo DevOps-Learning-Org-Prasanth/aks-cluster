@@ -3,7 +3,7 @@ terraform {
     resource_group_name  = "Cloud-DevOps-Training"
     storage_account_name = "cloudconfigbackend"
     container_name       = "tfstate"
-    key                  = "terraform.tfstate"
+    key                  = "containers.terraform.tfstate"
   }
   required_providers {
     azurerm = {
